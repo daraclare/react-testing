@@ -1,10 +1,16 @@
 import React from "react";
-import { render, cleanup } from "react-testing-library";
+import { render, cleanup, fireEvent } from "react-testing-library";
 import Counter from "./Counter";
 
+afterEach(cleanup);
+
 test("<Counter />", () => {
-  const wrapper = render(<Counter />);
-  wrapper.debug();
-  const button = wrapper.getByText("0").tagName;
-  expect(button).toBe("BUTTON");
+  const { debug, getByTestId } = render(<Counter />);
+  debug();
+  const counterButton = getByTestId("counter-button");
+  expect(counterButton.tagName).toBe("BUTTON");
+  expect(counterButton.textContent).toBe("0");
+
+  fireEvent.click(counterButton);
+  expect(counterButton.textContent).toBe("1");
 });
